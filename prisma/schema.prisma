@@ -1,0 +1,159 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
+  subscription  Subscription?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model Project {
+  id             String          @id @default(cuid())
+  userId         String
+  name           String
+  domain         String
+  region         String          @default("GLOBAL")
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scanRuns       ScanRun[]
+  checklistItems ChecklistItem[]
+  tasks          Task[]
+  evidence       Evidence[]
+}
+
+model ScanRun {
+  id             String        @id @default(cuid())
+  projectId      String
+  status         String        @default("PENDING")
+  score          Int?
+  startedAt      DateTime      @default(now())
+  completedAt    DateTime?
+  rawHtmlSnippet String?
+  summaryJson    String?
+  project        Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  findings       ScanFinding[]
+}
+
+model ScanFinding {
+  id            String   @id @default(cuid())
+  scanRunId     String
+  key           String
+  label         String
+  status        String
+  severity      String
+  details       String?
+  detectedValue String?
+  scanRun       ScanRun  @relation(fields: [scanRunId], references: [id], onDelete: Cascade)
+}
+
+model ChecklistItem {
+  id             String    @id @default(cuid())
+  projectId      String
+  key            String
+  label          String
+  status         String    @default("NOT_STARTED")
+  notes          String?
+  dueDate        DateTime?
+  isManual       Boolean   @default(true)
+  lastReviewedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  project        Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  evidence       Evidence[]
+  @@unique([projectId, key])
+}
+
+model Task {
+  id         String    @id @default(cuid())
+  projectId  String
+  findingKey String?
+  title      String
+  severity   String    @default("MEDIUM")
+  status     String    @default("OPEN")
+  owner      String?
+  dueDate    DateTime?
+  notes      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  evidence   Evidence[]
+}
+
+model Evidence {
+  id              String         @id @default(cuid())
+  projectId       String
+  checklistItemId String?
+  taskId          String?
+  type            String
+  fileName        String?
+  fileUrl         String?
+  sourceUrl       String?
+  note            String?
+  createdAt       DateTime       @default(now())
+  project         Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  checklistItem   ChecklistItem? @relation(fields: [checklistItemId], references: [id])
+  task            Task?          @relation(fields: [taskId], references: [id])
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  plan                 String    @default("FREE")
+  status               String    @default("active")
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
