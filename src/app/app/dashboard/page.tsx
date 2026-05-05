@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { format } from "date-fns";
+import { AuthRequiredCard } from "@/components/ui/auth-required-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,14 @@ export default async function DashboardPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/login");
+    return (
+      <div className="mx-auto max-w-7xl p-6">
+        <AuthRequiredCard
+          title="Sign in to view your dashboard"
+          description="Dashboard data is only shown for your account. Sign in to see project health, recent scans, and open remediation tasks."
+        />
+      </div>
+    );
   }
 
   const projects = await db.project.findMany({

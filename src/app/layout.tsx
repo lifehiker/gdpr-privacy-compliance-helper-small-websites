@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "PrivacyAudit — Website Privacy Check and GDPR Checklist",
+  title: "PrivacyAudit - Website Privacy Check and GDPR Checklist",
   description: "Run a fast website privacy audit, detect missing policy links and trackers, and track GDPR fixes in one simple dashboard.",
 };
 

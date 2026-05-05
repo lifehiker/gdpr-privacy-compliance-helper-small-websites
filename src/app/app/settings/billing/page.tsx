@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
+import { AuthRequiredCard } from "@/components/ui/auth-required-card";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +59,14 @@ export default async function BillingPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/login");
+    return (
+      <div className="mx-auto max-w-5xl p-6">
+        <AuthRequiredCard
+          title="Sign in to manage billing"
+          description="Billing details and plan changes are only available inside an authenticated account."
+        />
+      </div>
+    );
   }
 
   const subscription = await db.subscription.findUnique({

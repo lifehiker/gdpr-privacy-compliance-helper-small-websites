@@ -124,12 +124,12 @@ export default function HomePage() {
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               No credit card required
             </span>
-            <span className="hidden sm:block text-slate-700">·</span>
+            <span className="hidden sm:block text-slate-700">|</span>
             <span className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               Free plan available
             </span>
-            <span className="hidden sm:block text-slate-700">·</span>
+            <span className="hidden sm:block text-slate-700">|</span>
             <span className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               First scan in under 2 minutes
@@ -150,7 +150,7 @@ export default function HomePage() {
                 Most small websites miss at least 3 privacy requirements.
               </p>
               <p className="text-slate-600 mt-1">
-                Know exactly what to fix first — before regulators or users
+                Know exactly what to fix first - before regulators or users
                 notice.
               </p>
             </div>
@@ -184,7 +184,7 @@ export default function HomePage() {
               icon={<Search className="w-6 h-6 text-emerald-600" />}
               iconBg="bg-emerald-50 border-emerald-100"
               title="Automated Site Scanner"
-              description="Detects privacy policy links, cookie banners, analytics trackers, marketing pixels, and third-party scripts automatically — no manual digging required."
+              description="Detects privacy policy links, cookie banners, analytics trackers, marketing pixels, and third-party scripts automatically - no manual digging required."
               highlights={[
                 "Cookie & consent banner detection",
                 "Analytics & pixel identification",
@@ -195,7 +195,7 @@ export default function HomePage() {
               icon={<ClipboardList className="w-6 h-6 text-blue-600" />}
               iconBg="bg-blue-50 border-blue-100"
               title="Privacy Compliance Checklist"
-              description="Guided checklist covering data retention, legal basis, DSAR process, consent logging, and cookie categories — the full GDPR surface area."
+              description="Guided checklist covering data retention, legal basis, DSAR process, consent logging, and cookie categories - the full GDPR surface area."
               highlights={[
                 "Data retention policies",
                 "Legal basis documentation",
@@ -233,7 +233,7 @@ export default function HomePage() {
             <Step
               number="01"
               title="Add your website"
-              description="Enter your domain. PrivacyAudit takes it from there — no code installs needed."
+              description="Enter your domain. PrivacyAudit takes it from there - no code installs needed."
             />
             <Step
               number="02"
@@ -267,7 +267,7 @@ export default function HomePage() {
           </h2>
           <p className="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
             Join founders and agencies who use PrivacyAudit to stay ahead of
-            GDPR requirements — without the legal overhead.
+            GDPR requirements without the legal overhead.
           </p>
           <Link
             href="/register"
@@ -277,7 +277,7 @@ export default function HomePage() {
             <ArrowRight className="w-4 h-4" />
           </Link>
           <p className="text-slate-600 text-sm mt-4">
-            No credit card · Free forever plan available
+            No credit card | Free forever plan available
           </p>
         </div>
       </section>
@@ -312,7 +312,7 @@ export default function HomePage() {
 
           <div className="mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-slate-600 text-xs">
-              © {new Date().getFullYear()} PrivacyAudit. All rights reserved.
+              (c) {new Date().getFullYear()} PrivacyAudit. All rights reserved.
             </p>
             <p className="text-slate-600 text-xs flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5" />

@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { AuthRequiredCard } from "@/components/ui/auth-required-card";
 
 // Shape returned by GET /api/projects
 interface ScanRun {
@@ -98,6 +99,7 @@ function EmptyState({ onNew }: { onNew: () => void }) {
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Project | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -112,8 +114,14 @@ export default function ProjectsPage() {
   const fetchProjects = useCallback(async () => {
     try {
       const res = await fetch("/api/projects");
+      if (res.status === 401) {
+        setIsAuthenticated(false);
+        setProjects([]);
+        return;
+      }
       if (!res.ok) throw new Error("Failed to load projects");
       const data = await res.json();
+      setIsAuthenticated(true);
       setProjects(data);
     } catch {
       toast.error("Could not load projects. Please refresh.");
@@ -192,13 +200,20 @@ export default function ProjectsPage() {
             Manage and monitor the privacy compliance of your websites.
           </p>
         </div>
-        <Button size="sm" className="gap-2" onClick={openNew}>
-          <Plus className="h-4 w-4" />
-          New Project
-        </Button>
+        {isAuthenticated && (
+          <Button size="sm" className="gap-2" onClick={openNew}>
+            <Plus className="h-4 w-4" />
+            New Project
+          </Button>
+        )}
       </div>
 
-      {loading ? (
+      {!loading && !isAuthenticated ? (
+        <AuthRequiredCard
+          title="Sign in to manage projects"
+          description="Projects are scoped to your account. Sign in to create websites, run scans, and track remediation work."
+        />
+      ) : loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="h-40 rounded-lg bg-gray-200 animate-pulse" />
