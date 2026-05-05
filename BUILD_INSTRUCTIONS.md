@@ -5,7 +5,7 @@
 - **App Name:** gdpr-privacy-compliance-helper-small-websites
 - **Repository:** gdpr-privacy-compliance-helper-small-websites
 - **Tech Stack:** Next.js 15 (App Router) + TypeScript + Tailwind + shadcn/ui
-- **Description:** A lightweight compliance tool for indie developers, founders, and small site owners to identify and track basic privacy requirements such as consent banners, policy links, data flows, retention rules, and documentation. One version emphasizes automated site scanning while the other emphasizes checklist-based audits and evidence capture, but both serve the same small-business GDPR need.
+- **Description:** gdpr-privacy-compliance-helper-small-websites
 
 ---
 
@@ -953,6 +953,11 @@ AUTH_SECRET="your-secret-here"  # generate with: openssl rand -base64 32
   ```
 - Next.js evaluates module-level code during `next build` page data collection — missing env vars at module scope crash the build
 - Same rule applies to Stripe, OpenAI, and ALL third-party SDK clients — always lazy-initialize inside handler functions
+
+### Fonts
+- **Do NOT use `next/font/google`** — it fetches font files during `next build`, which can hang or fail in automated/offline build environments.
+- Use CSS/system font stacks by default.
+- If a custom font is truly required, commit the font file into the repo and use `next/font/local`; never depend on a build-time network font fetch.
 
 ### Deployment
 - Coolify with Docker — always set `output: "standalone"` in next.config.ts
