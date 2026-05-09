@@ -37,4 +37,5 @@ COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 CMD ["sh", "-c", "./node_modules/.bin/prisma db push --skip-generate && echo 'DB schema initialized' && node server.js"]
